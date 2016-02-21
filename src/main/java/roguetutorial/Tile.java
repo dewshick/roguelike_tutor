@@ -27,4 +27,8 @@ public enum Tile {
         glyph = x;
         color = brightBlack;
     }
+
+    public boolean isDiggable() { return this == Tile.WALL; }
+
+    public boolean isGround() { return this != Tile.BOUNDS && this != Tile.WALL; }
 }
