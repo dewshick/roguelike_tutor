@@ -1,6 +1,7 @@
 package roguetutorial.screens;
 
 import asciiPanel.AsciiPanel;
+import roguetutorial.Drawable;
 import roguetutorial.Tile;
 import roguetutorial.World;
 import roguetutorial.WorldBuilder;
@@ -8,6 +9,7 @@ import roguetutorial.creatures.Creature;
 import roguetutorial.creatures.CreatureFactory;
 
 import java.awt.event.KeyEvent;
+import java.util.Optional;
 
 /**
  * Created by avyatkin on 20/02/16.
@@ -24,15 +26,23 @@ public class PlayScreen implements Screen {
         screenWidth = 80;
         createWorld();
         CreatureFactory factory = new CreatureFactory(world);
+        createCreatures(factory);
+    }
+
+    private void createCreatures(CreatureFactory factory) {
         player = factory.newPlayer();
+        for (int i = 0; i < 8; i++) {
+            factory.newFungus();
+        }
     }
 
     public void displayOutput(AsciiPanel terminal) {
         int left = getScrollX();
         int top = getScrollY();
 
+        world.update();
         displayTiles(terminal, left, top);
-        terminal.write(player.getGlyph(), player.x - left, player.y - top);
+//        terminal.write(player.getGlyph(), player.x - left, player.y - top, player.getColor());
     }
 
     public Screen respondToUserInput(KeyEvent key) {
@@ -64,11 +74,20 @@ public class PlayScreen implements Screen {
             for (int y = 0; y < screenHeight; y++) {
                 int wx = x + left;
                 int wy = y + top;
-                Tile tile = world.tile(wx, wy);
-                terminal.write(tile.getGlyph(), x, y, tile.getColor());
+
+                Optional<Creature> optCreature = world.creatureAt(wx, wy);
+                if (optCreature.isPresent()) {
+                    Creature creature = optCreature.get();
+                    terminal.write(creature.getGlyph(), x, y, creature.getColor());
+                } else {
+                    Tile tile = world.tile(wx, wy);
+                    terminal.write(tile.getGlyph(), x, y, tile.getColor());
+                }
             }
         }
     }
+
+
 
     public int getScrollX() {
         return Math.max(0, Math.min(player.x - screenWidth / 2, world.getWidth() - screenWidth));
@@ -77,4 +96,5 @@ public class PlayScreen implements Screen {
     public int getScrollY() {
         return Math.max(0, Math.min(player.y - screenHeight / 2, world.getHeight() - screenHeight));
     }
+
 }

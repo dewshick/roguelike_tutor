@@ -7,7 +7,7 @@ import java.awt.*;
 /**
  * Created by avyatkin on 20/02/16.
  */
-public enum Tile {
+public enum Tile implements Drawable {
     FLOOR('.', AsciiPanel.yellow),
     WALL('#', AsciiPanel.yellow),
     BOUNDS('x', AsciiPanel.brightBlack);
