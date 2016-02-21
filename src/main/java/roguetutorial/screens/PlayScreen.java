@@ -60,14 +60,14 @@ public class PlayScreen implements Screen {
     }
 
     private void displayTiles(AsciiPanel terminal, int left, int top) {
-        for (int x = 0; x < screenWidth; x++)
+        for (int x = 0; x < screenWidth; x++) {
             for (int y = 0; y < screenHeight; y++) {
                 int wx = x + left;
                 int wy = y + top;
                 Tile tile = world.tile(wx, wy);
-                terminal.write(tile.getGlyph(), wx, wy, tile.getColor());
+                terminal.write(tile.getGlyph(), x, y, tile.getColor());
             }
-
+        }
     }
 
     public int getScrollX() {
