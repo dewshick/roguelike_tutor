@@ -5,8 +5,8 @@ import roguetutorial.World;
 import roguetutorial.creatures.ai.CreatureAi;
 import roguetutorial.creatures.ai.FungusAi;
 import roguetutorial.creatures.ai.PlayerAi;
+import java.util.List;
 
-import java.awt.*;
 
 /**
  * Created by avyatkin on 21/02/16.
@@ -18,15 +18,15 @@ public class CreatureFactory {
         this.world = world;
     }
 
-    public Creature newPlayer() {
-        Creature player = new Creature(world, '@', AsciiPanel.brightWhite);
+    public Creature newPlayer(List<String> messages) {
+        Creature player = new Creature(world, '@', AsciiPanel.brightWhite, 100, 20, 5);
         world.addAtEmptyNewLocation(player);
-        new PlayerAi(player);
+        new PlayerAi(player, messages);
         return player;
     }
 
     public Creature newFungus() {
-        Creature fungus = new Creature(world, 'f', AsciiPanel.green);
+        Creature fungus = new Creature(world, 'f', AsciiPanel.green, 10, 0, 0);
         world.addAtEmptyNewLocation(fungus);
         new FungusAi(fungus, this);
         return fungus;

@@ -17,4 +17,6 @@ public class CreatureAi {
     public void onEnter(int newX, int newY, Tile tile) { }
 
     public void onUpdate() {}
+
+    public void onNotify(String format) { }
 }

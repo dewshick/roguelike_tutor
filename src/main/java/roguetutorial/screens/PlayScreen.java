@@ -1,14 +1,13 @@
 package roguetutorial.screens;
 
 import asciiPanel.AsciiPanel;
-import roguetutorial.Drawable;
-import roguetutorial.Tile;
-import roguetutorial.World;
-import roguetutorial.WorldBuilder;
+import roguetutorial.*;
 import roguetutorial.creatures.Creature;
 import roguetutorial.creatures.CreatureFactory;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,17 +19,21 @@ public class PlayScreen implements Screen {
     private int screenWidth;
     private int screenHeight;
     private Creature player;
+    private List<String> messages;
+
+    public static final int PLAYSCREEN_HEIGHT = 21;
 
     public PlayScreen() {
-        screenHeight = 21;
-        screenWidth = 80;
+        screenHeight = PLAYSCREEN_HEIGHT;
+        screenWidth = MainApp.SCREEN_WIDTH;
+        messages = new ArrayList<>();
         createWorld();
         CreatureFactory factory = new CreatureFactory(world);
         createCreatures(factory);
     }
 
     private void createCreatures(CreatureFactory factory) {
-        player = factory.newPlayer();
+        player = factory.newPlayer(messages);
         for (int i = 0; i < 8; i++) {
             factory.newFungus();
         }
@@ -42,7 +45,9 @@ public class PlayScreen implements Screen {
 
         world.update();
         displayTiles(terminal, left, top);
-//        terminal.write(player.getGlyph(), player.x - left, player.y - top, player.getColor());
+        String stats = String.format(" %3d/%3d hp", player.getHp(), player.getMaxHp());
+        terminal.write(stats, 1, 23);
+        displayMessages(terminal, messages);
     }
 
     public Screen respondToUserInput(KeyEvent key) {
@@ -87,14 +92,23 @@ public class PlayScreen implements Screen {
         }
     }
 
-
-
     public int getScrollX() {
         return Math.max(0, Math.min(player.x - screenWidth / 2, world.getWidth() - screenWidth));
     }
 
     public int getScrollY() {
         return Math.max(0, Math.min(player.y - screenHeight / 2, world.getHeight() - screenHeight));
+    }
+
+    final int LAST_DISPLAYED_MESSAGES = 4;
+
+    private void displayMessages(AsciiPanel terminal, List<String> messages) {
+        int top = screenHeight + LAST_DISPLAYED_MESSAGES;
+        int lastMsgId = messages.size() - 1;
+        for (int i = 0; i < LAST_DISPLAYED_MESSAGES && lastMsgId > 0;i++) {
+            terminal.writeCenter(messages.get(lastMsgId), top + i);
+            lastMsgId--;
+        }
     }
 
 }
