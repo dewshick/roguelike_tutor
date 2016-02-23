@@ -39,7 +39,7 @@ public class World {
     }
 
     public Optional<Creature> creatureAt(Point3D point) {
-        return creatures.stream().filter((c) -> c.coords == point).findFirst();
+        return creatures.stream().filter((c) -> c.coords.equals(point)).findFirst();
     }
 
 
