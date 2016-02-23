@@ -2,6 +2,7 @@ package roguetutorial.creatures;
 
 import roguetutorial.Drawable;
 import roguetutorial.world.Point3D;
+import roguetutorial.world.Tile;
 import roguetutorial.world.World;
 import roguetutorial.creatures.ai.CreatureAi;
 
@@ -61,10 +62,27 @@ public class Creature implements Drawable {
     public void moveBy(Point3D vector) {
         Point3D newCoords = new Point3D(vector.x + coords.x, vector.y + coords.y, vector.z + coords.z);
         Optional<Creature> enemy = world.creatureAt(newCoords);
+        Tile targetTile = world.getTile(newCoords);
+
+        if (vector.z == -1)
+            if (targetTile == Tile.STAIRS_DOWN)
+                logAction("walk upstairs, moved to level " + newCoords.z);
+            else {
+                logAction("fail to walk upstairs cause there's no ladder here");
+                return;
+            }
+        else if (vector.z == 1)
+            if (targetTile == Tile.STAIRS_UP)
+                logAction("walk downstairs, moved to level " + newCoords.z);
+            else {
+                logAction("fail to walk downstairs cause there's no ladder here");
+                return;
+            }
+
         if (enemy.isPresent())
             attack(enemy.get());
         else
-            ai.onEnter(newCoords, world.getTile(newCoords));
+            ai.onEnter(newCoords, targetTile);
     }
 
     private void attack(Creature enemy) {

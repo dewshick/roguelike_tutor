@@ -73,6 +73,12 @@ public class PlayScreen implements Screen {
             case KeyEvent.VK_ESCAPE: return new LoseScreen();
             case KeyEvent.VK_ENTER: return new WinScreen();
         }
+
+        switch (key.getKeyChar()){
+            case '<': player.moveBy(new Point3D(0, 0, -1)); break;
+            case '>': player.moveBy(new Point3D(0, 0, 1)); break;
+        }
+
         return this;
     }
 

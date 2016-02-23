@@ -132,7 +132,7 @@ public class WorldBuilder {
         do {
             Point3D p = candidates.remove(0);
             tiles[p.x][p.y][p.z] = Tile.STAIRS_DOWN;
-            tiles[p.x][p.y][p.z] = Tile.STAIRS_UP;
+            tiles[p.x][p.y][p.z + 1] = Tile.STAIRS_UP;
             stairs++;
         } while (candidates.size() / stairs > 250);
     }
