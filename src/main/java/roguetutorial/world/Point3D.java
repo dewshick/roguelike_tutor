@@ -37,18 +37,27 @@ public class Point3D {
         }
     }
 
-    public List<Point3D> neighbors8() {
+    public List<Point3D> neighbors8(Point3D bounds) {
         List<Point3D> points = new ArrayList<>();
         for (int ox = -1; ox < 2; ox++)
-            for (int oy = -1; oy < 2; oy++)
+            for (int oy = -1; oy < 2; oy++) {
+                Point3D pointToAdd = new Point3D(x + ox, y + oy, z);
                 if (ox == 0 && oy == 0)
                     continue;
-                else if (x + ox < 0 || y + oy < 0)
+                else if (!pointToAdd.withinBounds(bounds))
                     continue;
                 else
-                    points.add(new Point3D(x + ox, y + oy, z));
-
+                    points.add(pointToAdd);
+            }
         Collections.shuffle(points);
         return points;
+    }
+
+    public boolean withinBounds(Point3D bounds) {
+        return !(x < 0 || y < 0 || z < 0 || x >= bounds.x || y >= bounds.y || z >= bounds.z);
+    }
+
+    public String toString() {
+        return "(" + x + "," + y + "," + z + ")";
     }
 }

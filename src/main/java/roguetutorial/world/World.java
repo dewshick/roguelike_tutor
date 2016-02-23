@@ -15,32 +15,27 @@ public class World {
     public List<Creature> getCreatures() { return creatures; }
 
     private List<Creature> creatures;
-    private int width;
-    private int height;
-    private int depth;
 
-    public int getHeight() { return height; }
-    public int getWidth() { return width; }
-    public int getDepth() { return depth; }
+    public Point3D getBounds() {
+        return bounds;
+    }
+
+    private Point3D bounds;
 
     public Tile getTile(Point3D point) {
-        int x = point.x;
-        int y = point.y;
-        int z = point.z;
-        if (x >= width || x < 0 || y >= height || y < 0 || z >= depth || z < 0)
+        if (!point.withinBounds(bounds))
             return Tile.BOUNDS;
         else
-            return tiles[x][y][z];
+            return tiles[point.x][point.y][point.z];
     }
 
     public void setTile(Point3D point, Tile newTile) {
-        int x = point.x;
-        int y = point.y;
-        int z = point.z;
-        if (x >= width || x < 0 || y >= height || y < 0 || z >= depth || z < 0)
+        if (!point.withinBounds(bounds)) {
+            System.out.println("Invalid tile coords: " + point);
             return;
+        }
         else
-            tiles[x][y][z] = newTile;
+            tiles[point.x][point.y][point.z] = newTile;
     }
 
     public Optional<Creature> creatureAt(Point3D point) {
@@ -50,9 +45,9 @@ public class World {
 
     public World(Tile[][][] tiless) {
         tiles = tiless;
-        width = tiless.length;
-        height = tiless[0].length;
-        creatures = new ArrayList<Creature>();
+
+        bounds = new Point3D(tiless.length, tiless[0].length, tiless[0][0].length);
+        creatures = new ArrayList<>();
     }
 
     public void dig(Point3D point) {
@@ -62,10 +57,9 @@ public class World {
 
     public void addAtEmptyLocation(Creature creature, int z) {
         Point3D buildPoint;
-
         do {
-            int x = (int)(Math.random() * width);
-            int y = (int)(Math.random() * height);
+            int x = (int)(Math.random() * bounds.x);
+            int y = (int)(Math.random() * bounds.y);
             buildPoint = new Point3D(x, y, z);
         } while (!getTile(buildPoint).isGround() && !creatureAt(buildPoint).isPresent());
 

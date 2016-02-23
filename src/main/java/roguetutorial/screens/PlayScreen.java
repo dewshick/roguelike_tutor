@@ -39,7 +39,7 @@ public class PlayScreen implements Screen {
     private void createCreatures(CreatureFactory factory) {
         final int FUNGUS_COUNT = 8;
         player = factory.newPlayer(messages);
-        for (int z = 0; z < world.getDepth(); z++)
+        for (int z = 0; z < world.getBounds().z; z++)
             for (int fid = 0; fid < FUNGUS_COUNT; fid++)
                 factory.newFungus(z);
 
@@ -98,11 +98,11 @@ public class PlayScreen implements Screen {
     }
 
     public int getScrollX() {
-        return Math.max(0, Math.min(player.coords.x - screenWidth / 2, world.getWidth() - screenWidth));
+        return Math.max(0, Math.min(player.coords.x - screenWidth / 2, world.getBounds().x - screenWidth));
     }
 
     public int getScrollY() {
-        return Math.max(0, Math.min(player.coords.y - screenHeight / 2, world.getHeight() - screenHeight));
+        return Math.max(0, Math.min(player.coords.y - screenHeight / 2, world.getBounds().y - screenHeight));
     }
 
     final int LAST_DISPLAYED_MESSAGES = 4;
