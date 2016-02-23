@@ -1,6 +1,7 @@
 package roguetutorial.creatures.ai;
 
-import roguetutorial.Tile;
+import roguetutorial.world.Point3D;
+import roguetutorial.world.Tile;
 import roguetutorial.creatures.Creature;
 
 /**
@@ -14,7 +15,7 @@ public class CreatureAi {
         creature.setAi(this);
     }
 
-    public void onEnter(int newX, int newY, Tile tile) { }
+    public void onEnter(Point3D newCoords, Tile tile) { }
 
     public void onUpdate() {}
 

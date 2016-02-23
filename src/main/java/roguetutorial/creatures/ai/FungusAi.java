@@ -2,6 +2,7 @@ package roguetutorial.creatures.ai;
 
 import roguetutorial.creatures.Creature;
 import roguetutorial.creatures.CreatureFactory;
+import roguetutorial.world.Point3D;
 
 /**
  * Created by avyatkin on 22/02/16.
@@ -22,14 +23,16 @@ public class FungusAi extends CreatureAi {
     }
 
     private void spread() {
-        int x = creature.x + (int)(Math.random() * 11) - 5;
-        int y = creature.y + (int)(Math.random() * 11) - 5;
-        if (!creature.canEnter(x, y))
+        Point3D displacement = new Point3D(
+                (int)(Math.random() * 11) - 5,
+                (int)(Math.random() * 11) - 5,
+                0);
+        Point3D newPlace = creature.coords.plus(displacement);
+        if (!creature.canEnter(newPlace))
             return;
 
-        Creature child = factory.newFungus();
-        child.x = x;
-        child.y = y;
+        Creature child = factory.newFungus(newPlace.z);
+        child.coords = newPlace;
         spread++;
         creature.logAction("spawn a child");
     }

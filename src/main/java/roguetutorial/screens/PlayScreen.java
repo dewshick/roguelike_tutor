@@ -4,6 +4,10 @@ import asciiPanel.AsciiPanel;
 import roguetutorial.*;
 import roguetutorial.creatures.Creature;
 import roguetutorial.creatures.CreatureFactory;
+import roguetutorial.world.Point3D;
+import roguetutorial.world.Tile;
+import roguetutorial.world.World;
+import roguetutorial.world.WorldBuilder;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -33,10 +37,12 @@ public class PlayScreen implements Screen {
     }
 
     private void createCreatures(CreatureFactory factory) {
+        final int FUNGUS_COUNT = 8;
         player = factory.newPlayer(messages);
-        for (int i = 0; i < 8; i++) {
-            factory.newFungus();
-        }
+        for (int z = 0; z < world.getDepth(); z++)
+            for (int fid = 0; fid < FUNGUS_COUNT; fid++)
+                factory.newFungus(z);
+
     }
 
     public void displayOutput(AsciiPanel terminal) {
@@ -53,17 +59,17 @@ public class PlayScreen implements Screen {
     public Screen respondToUserInput(KeyEvent key) {
         switch (key.getKeyCode()){
             case KeyEvent.VK_H:
-            case KeyEvent.VK_LEFT: player.moveBy(-1, 0); break;
+            case KeyEvent.VK_LEFT: player.moveBy(new Point3D(-1, 0, 0)); break;
             case KeyEvent.VK_L:
-            case KeyEvent.VK_RIGHT: player.moveBy(1, 0); break;
+            case KeyEvent.VK_RIGHT: player.moveBy(new Point3D(1, 0, 0)); break;
             case KeyEvent.VK_K:
-            case KeyEvent.VK_UP: player.moveBy(0, -1); break;
+            case KeyEvent.VK_UP: player.moveBy(new Point3D(0, -1, 0)); break;
             case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_J: player.moveBy(0, 1); break;
-            case KeyEvent.VK_Y: player.moveBy(-1, -1); break;
-            case KeyEvent.VK_U: player.moveBy(1, -1); break;
-            case KeyEvent.VK_B: player.moveBy(-1, 1); break;
-            case KeyEvent.VK_N: player.moveBy(1, 1); break;
+            case KeyEvent.VK_J: player.moveBy(new Point3D(0, 1, 0)); break;
+            case KeyEvent.VK_Y: player.moveBy(new Point3D(-1, -1,0)); break;
+            case KeyEvent.VK_U: player.moveBy(new Point3D(1, -1, 0)); break;
+            case KeyEvent.VK_B: player.moveBy(new Point3D(-1, 1, 0)); break;
+            case KeyEvent.VK_N: player.moveBy(new Point3D(1, 1, 0)); break;
             case KeyEvent.VK_ESCAPE: return new LoseScreen();
             case KeyEvent.VK_ENTER: return new WinScreen();
         }
@@ -71,21 +77,20 @@ public class PlayScreen implements Screen {
     }
 
     private void createWorld() {
-        world = new WorldBuilder(90, 31).makeCaves().build();
+        world = new WorldBuilder(new Point3D(90, 31, 6)).makeCaves().build();
     }
 
     private void displayTiles(AsciiPanel terminal, int left, int top) {
+        int z = player.coords.z;
         for (int x = 0; x < screenWidth; x++) {
             for (int y = 0; y < screenHeight; y++) {
-                int wx = x + left;
-                int wy = y + top;
-
-                Optional<Creature> optCreature = world.creatureAt(wx, wy);
+                Point3D currentPoint = new Point3D(x + left, y + top, z);
+                Optional<Creature> optCreature = world.creatureAt(currentPoint);
                 if (optCreature.isPresent()) {
                     Creature creature = optCreature.get();
                     terminal.write(creature.getGlyph(), x, y, creature.getColor());
                 } else {
-                    Tile tile = world.tile(wx, wy);
+                    Tile tile = world.getTile(currentPoint);
                     terminal.write(tile.getGlyph(), x, y, tile.getColor());
                 }
             }
@@ -93,11 +98,11 @@ public class PlayScreen implements Screen {
     }
 
     public int getScrollX() {
-        return Math.max(0, Math.min(player.x - screenWidth / 2, world.getWidth() - screenWidth));
+        return Math.max(0, Math.min(player.coords.x - screenWidth / 2, world.getWidth() - screenWidth));
     }
 
     public int getScrollY() {
-        return Math.max(0, Math.min(player.y - screenHeight / 2, world.getHeight() - screenHeight));
+        return Math.max(0, Math.min(player.coords.y - screenHeight / 2, world.getHeight() - screenHeight));
     }
 
     final int LAST_DISPLAYED_MESSAGES = 4;

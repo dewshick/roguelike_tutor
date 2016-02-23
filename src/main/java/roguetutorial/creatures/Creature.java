@@ -1,7 +1,8 @@
 package roguetutorial.creatures;
 
 import roguetutorial.Drawable;
-import roguetutorial.World;
+import roguetutorial.world.Point3D;
+import roguetutorial.world.World;
 import roguetutorial.creatures.ai.CreatureAi;
 
 import java.awt.*;
@@ -12,8 +13,7 @@ import java.util.Optional;
  */
 public class Creature implements Drawable {
     private World world;
-    public int x;
-    public int y;
+    public Point3D coords;
 
     private char glyph;
     private Color color;
@@ -54,18 +54,17 @@ public class Creature implements Drawable {
         this.defenseValue = defenseValue;
     }
 
-    public void dig(int wx, int wy) {
-        world.dig(wx, wy);
+    public void dig(Point3D point3D) {
+        world.dig(point3D);
     }
 
-    public void moveBy(int mx, int my) {
-        int newX = x + mx;
-        int newY = y + my;
-        Optional<Creature> enemy = world.creatureAt(newX, newY);
+    public void moveBy(Point3D vector) {
+        Point3D newCoords = new Point3D(vector.x + coords.x, vector.y + coords.y, vector.z + coords.z);
+        Optional<Creature> enemy = world.creatureAt(newCoords);
         if (enemy.isPresent())
             attack(enemy.get());
         else
-            ai.onEnter(newX, newY, world.tile(newX, newY));
+            ai.onEnter(newCoords, world.getTile(newCoords));
     }
 
     private void attack(Creature enemy) {
@@ -88,8 +87,8 @@ public class Creature implements Drawable {
         ai.onUpdate();
     }
 
-    public boolean canEnter(int x, int y) {
-        return world.tile(x,y).isGround() && !world.creatureAt(x, y).isPresent();
+    public boolean canEnter(Point3D point3D) {
+        return world.getTile(point3D).isGround() &&!world.creatureAt(point3D).isPresent();
     }
 
     public void notify(String message, Object ... params) {
@@ -103,7 +102,8 @@ public class Creature implements Drawable {
                 if(ox * ox + oy * oy > radius * radius)
                     continue;
 
-                Optional<Creature> maybeReciever = world.creatureAt(x + ox, y + oy);
+                Point3D recieverCoords = new Point3D(coords.x + ox, coords.y + oy, coords.z);
+                Optional<Creature> maybeReciever = world.creatureAt(recieverCoords);
                 if (!maybeReciever.isPresent())
                     continue;
 

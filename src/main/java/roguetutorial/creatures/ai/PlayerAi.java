@@ -1,6 +1,7 @@
 package roguetutorial.creatures.ai;
 
-import roguetutorial.Tile;
+import roguetutorial.world.Point3D;
+import roguetutorial.world.Tile;
 import roguetutorial.creatures.Creature;
 
 import java.util.List;
@@ -18,12 +19,11 @@ public class PlayerAi extends CreatureAi {
 
 
 
-    public void onEnter(int x, int y, Tile tile) {
+    public void onEnter(Point3D target, Tile tile) {
         if (tile.isGround()) {
-            creature.x = x;
-            creature.y = y;
+            creature.coords = target;
         } else if (tile.isDiggable()) {
-            creature.dig(x, y);
+            creature.dig(target);
         }
     }
 

@@ -1,8 +1,7 @@
 package roguetutorial.creatures;
 
 import asciiPanel.AsciiPanel;
-import roguetutorial.World;
-import roguetutorial.creatures.ai.CreatureAi;
+import roguetutorial.world.World;
 import roguetutorial.creatures.ai.FungusAi;
 import roguetutorial.creatures.ai.PlayerAi;
 import java.util.List;
@@ -20,14 +19,14 @@ public class CreatureFactory {
 
     public Creature newPlayer(List<String> messages) {
         Creature player = new Creature(world, '@', AsciiPanel.brightWhite, 100, 20, 5);
-        world.addAtEmptyNewLocation(player);
+        world.addAtEmptyLocation(player, 0);
         new PlayerAi(player, messages);
         return player;
     }
 
-    public Creature newFungus() {
+    public Creature newFungus(int z) {
         Creature fungus = new Creature(world, 'f', AsciiPanel.green, 10, 0, 0);
-        world.addAtEmptyNewLocation(fungus);
+        world.addAtEmptyLocation(fungus, z);
         new FungusAi(fungus, this);
         return fungus;
     }

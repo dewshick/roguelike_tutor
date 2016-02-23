@@ -1,6 +1,7 @@
-package roguetutorial;
+package roguetutorial.world;
 
 import asciiPanel.AsciiPanel;
+import roguetutorial.Drawable;
 
 import java.awt.*;
 
@@ -10,7 +11,9 @@ import java.awt.*;
 public enum Tile implements Drawable {
     FLOOR('.', AsciiPanel.yellow),
     WALL('#', AsciiPanel.yellow),
-    BOUNDS('x', AsciiPanel.brightBlack);
+    BOUNDS('x', AsciiPanel.brightBlack),
+    STAIRS_UP('<', AsciiPanel.brightBlack),
+    STAIRS_DOWN('>', AsciiPanel.brightBlack);
 
     private char glyph;
     private Color color;
