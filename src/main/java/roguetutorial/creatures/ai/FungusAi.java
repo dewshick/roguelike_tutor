@@ -18,7 +18,9 @@ public class FungusAi extends CreatureAi {
     }
 
     public void onUpdate() {
-        if (spread < 5 && Math.random() < 0.02)
+        final int SPREAD_COUNT = 5;
+        final double SPREAD_PROBABILITY = 0.01;
+        if (spread < SPREAD_COUNT && Math.random() < SPREAD_PROBABILITY)
             spread();
     }
 

@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 public class StartScreen implements Screen {
     public void displayOutput(AsciiPanel terminal) {
         terminal.write("roguelike tutorial", 1, 1);
-        terminal.writeCenter("-- press [enter] to start --", 22);
+        terminal.writeCenter("-- press [enter] to start --", SCREEN_Y_LOWER_BOUND);
 
     }
 

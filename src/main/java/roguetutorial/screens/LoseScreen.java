@@ -11,7 +11,7 @@ public class LoseScreen implements Screen {
     @Override
     public void displayOutput(AsciiPanel terminal) {
         terminal.write("You lost.", 1, 1);
-        terminal.writeCenter("-- press [enter] to restart --", 22);
+        terminal.writeCenter("-- press [enter] to restart --", SCREEN_Y_LOWER_BOUND);
     }
 
     @Override

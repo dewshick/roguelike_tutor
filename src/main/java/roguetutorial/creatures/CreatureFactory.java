@@ -18,15 +18,22 @@ public class CreatureFactory {
     }
 
     public Creature newPlayer(List<String> messages) {
-        Creature player = new Creature(world, '@', AsciiPanel.brightWhite, 100, 20, 5);
-        world.addAtEmptyLocation(player, 0);
+        final int PLAYER_HP = 100;
+        final int PLAYER_DMG = 20;
+        final int PLAYER_DEFENSE = 5;
+        final int STARTING_LEVEL = 0;
+        Creature player = new Creature(world, '@', AsciiPanel.brightWhite, PLAYER_HP, PLAYER_DMG, PLAYER_DEFENSE);
+        world.addAtEmptyLocation(player, STARTING_LEVEL);
         new PlayerAi(player, messages);
         return player;
     }
 
-    public Creature newFungus(int z) {
-        Creature fungus = new Creature(world, 'f', AsciiPanel.green, 10, 0, 0);
-        world.addAtEmptyLocation(fungus, z);
+    public Creature newFungus(int zLevel) {
+        final int FUNGUS_HP = 10;
+        final int FUNGUS_DMG = 0;
+        final int FUNGUS_DEFENSE = 0;
+        Creature fungus = new Creature(world, 'f', AsciiPanel.green, FUNGUS_HP, FUNGUS_DMG, FUNGUS_DEFENSE);
+        world.addAtEmptyLocation(fungus, zLevel);
         new FungusAi(fungus, this);
         return fungus;
     }

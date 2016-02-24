@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 public class WinScreen implements Screen {
     public void displayOutput(AsciiPanel terminal) {
         terminal.write("You lost.", 1, 1);
-        terminal.writeCenter("-- press [enter] to restart --", 22);
+        terminal.writeCenter("-- press [enter] to restart --", SCREEN_Y_LOWER_BOUND);
     }
 
     public Screen respondToUserInput(KeyEvent key) {

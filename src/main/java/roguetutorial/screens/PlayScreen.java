@@ -52,7 +52,7 @@ public class PlayScreen implements Screen {
         world.update();
         displayTiles(terminal, left, top);
         String stats = String.format(" %3d/%3d hp", player.getHp(), player.getMaxHp());
-        terminal.write(stats, 1, 23);
+        terminal.write(stats, 1, SCREEN_Y_LOWER_BOUND + 1);
         displayMessages(terminal, messages);
     }
 

@@ -22,10 +22,11 @@ public class WorldBuilder {
     }
 
     private WorldBuilder randomizeTiles() {
+        final double WALL_PROBABILITY = 0.5;
         for(int z = 0; z < worldSize.z; z++)
             for(int x = 0; x < worldSize.x; x++)
                 for(int y = 0; y < worldSize.y; y++)
-                    tiles[x][y][z] = Math.random() > 0.5 ? Tile.FLOOR : Tile.WALL;
+                    tiles[x][y][z] = Math.random() > WALL_PROBABILITY ? Tile.FLOOR : Tile.WALL;
 
         return this;
     }
@@ -128,13 +129,14 @@ public class WorldBuilder {
     private void connectRegionsDown(int z, int r1, int r2) {
         List<Point3D> candidates = findRegionOverlaps(z, r1, r2);
 
+        final int CELLS_PER_STAIRS = 250;
         int stairs = 0;
         do {
             Point3D p = candidates.remove(0);
             tiles[p.x][p.y][p.z] = Tile.STAIRS_DOWN;
             tiles[p.x][p.y][p.z + 1] = Tile.STAIRS_UP;
             stairs++;
-        } while (candidates.size() / stairs > 250);
+        } while (candidates.size() / stairs > CELLS_PER_STAIRS);
     }
 
     private List<Point3D> findRegionOverlaps(int z, int r1, int r2) {
