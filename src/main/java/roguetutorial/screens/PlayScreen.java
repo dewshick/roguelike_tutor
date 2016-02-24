@@ -10,7 +10,9 @@ import roguetutorial.world.World;
 import roguetutorial.world.WorldBuilder;
 
 import java.awt.event.KeyEvent;
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,11 +74,10 @@ public class PlayScreen implements Screen {
             case KeyEvent.VK_N: player.moveBy(new Point3D(1, 1, 0)); break;
             case KeyEvent.VK_ESCAPE: return new LoseScreen();
             case KeyEvent.VK_ENTER: return new WinScreen();
-        }
-
-        switch (key.getKeyChar()){
-            case '<': player.moveBy(new Point3D(0, 0, -1)); break;
-            case '>': player.moveBy(new Point3D(0, 0, 1)); break;
+            default: switch (key.getKeyChar()){
+                case '<': player.moveBy(new Point3D(0, 0, -1)); break;
+                case '>': player.moveBy(new Point3D(0, 0, 1)); break;
+            }
         }
 
         return this;
